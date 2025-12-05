@@ -105,15 +105,18 @@
                 tabindex="-1"
                 onkeydown={(e) => e.key === "Escape" && closeCrownDialog()}
             >
-                <h2 class="text-2xl font-bold mb-6 text-center">Who won?</h2>
-                <select bind:value={selectedVictorName} class="w-full py-3 px-4 border-2 border-gray-300 rounded-[10px] text-base mb-6 focus:outline-none focus:border-brand-primary">
+                <h2 class="text-2xl font-bold mb-6 text-center text-brand-primary">Who won?</h2>
+                <select
+                    bind:value={selectedVictorName}
+                    class="w-full py-3 px-4 border-2 border-brand-primary rounded-[10px] text-base mb-6 text-brand-primary focus:outline-none focus:border-brand-primary"
+                >
                     <option value="">Select a winner...</option>
                     {#each players as player}
                         <option value={player.name}>{player.name}</option>
                     {/each}
                 </select>
                 <div class="flex gap-4">
-                    <button onclick={closeCrownDialog} class="flex-1 py-3 px-4 bg-gray-300 text-gray-700 rounded-[10px] font-semibold hover:bg-gray-400 transition-colors">Cancel</button>
+                    <button onclick={closeCrownDialog} class="flex-1 py-3 px-4 bg-gray-200 text-gray-700 rounded-[10px] font-semibold hover:bg-gray-200 transition-colors">Cancel</button>
                     <button
                         onclick={submitVictor}
                         disabled={!selectedVictorName}
@@ -142,9 +145,9 @@
                 tabindex="-1"
                 onkeydown={(e) => e.key === "Escape" && closeCongratulationsModal()}
             >
-                <h2 class="text-4xl font-bold mb-4">🎉 Congratulations! 🎉</h2>
+                <h2 class="text-4xl font-bold mb-4">🎉 Congratulations!</h2>
                 <p class="text-2xl mb-6 font-semibold">{victor.name} wins!</p>
-                <button onclick={closeCongratulationsModal} class="w-full py-3 px-4 bg-brand-primary text-white rounded-[10px] font-semibold hover:opacity-90 transition-opacity">Close</button>
+                <a href="/" class="w-full py-3 px-4 bg-brand-primary text-white rounded-[10px] font-semibold hover:opacity-90 transition-opacity">New game</a>
             </div>
         </div>
     {/if}

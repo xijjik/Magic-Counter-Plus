@@ -4,3 +4,9 @@
     --color-brand-primary: #f87e7b;
     --color-brand-secondary: #f0f8c1;
 }
+
+body {
+    font-family: "Roboto", Arial;
+    font-weight: 700;
+    font-style: italic;
+}

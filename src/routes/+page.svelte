@@ -46,13 +46,16 @@
         <div class="flex flex-col gap-[15px] mb-[30px]">
             {#each playerNames as name, i}
                 <div>
-                    <label for="player-{i}" class="block mb-[5px] font-semibold text-[#555]">Player {i + 1}:</label>
+                    <label for="player-{i}" class="block mb-[5px] font-semibold text-black">Player {i + 1}:</label>
                     <input
                         id="player-{i}"
                         type="text"
                         bind:value={playerNames[i]}
+                        required
+                        minlength="3"
+                        maxlength="3"
                         placeholder="Player {i + 1}"
-                        class="w-full py-3 px-3 border-2 border-[#ddd] rounded-[10px] text-base box-border transition-[border-color] duration-200 focus:outline-none focus:border-[#667eea]"
+                        class="uppercase w-full py-3 px-3 border-2 border-[#ddd] rounded-[10px] text-base box-border transition-[border-color] duration-200 focus:outline-none focus:border-[#667eea]"
                     />
                 </div>
             {/each}
