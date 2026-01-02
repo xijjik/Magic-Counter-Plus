@@ -31,12 +31,10 @@
 <div class="min-h-screen flex items-center justify-center p-5 font-sans">
   <div class="bg-white rounded-[20px] p-10 max-w-[500px] w-full">
     <div class="mb-[30px]">
-      <label
-        for="player-count"
-        class="block mb-[10px] font-semibold text-[#555]"
+      <label for="player-count" class="block mb-2.5 font-semibold text-[#555]"
         >Number of Players:</label
       >
-      <div class="flex gap-[10px]">
+      <div class="flex gap-2.5">
         {#each [2, 3, 4, 5, 6] as count}
           <button
             class="flex-1 py-3 px-3 border-2 border-brand-primary rounded-[10px] text-[1.1rem] font-semibold text-brand-primary cursor-pointer transition-all duration-200 {playerCount ===

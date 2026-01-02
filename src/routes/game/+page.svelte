@@ -63,10 +63,24 @@
     crownDialog = false;
   }
 
+  function sendDataToSupabase() {
+    fetch("/api/leaderboard", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        players: selectedVictorName.toUpperCase(),
+        wins: 1,
+      }),
+    });
+  }
+
   function submitVictor() {
     if (selectedVictorName) {
       victor = players.find((p) => p.name === selectedVictorName) || null;
       crownDialog = false;
+      sendDataToSupabase();
       congratulationsModal = true;
     }
   }
