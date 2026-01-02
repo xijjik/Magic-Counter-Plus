@@ -77,5 +77,11 @@
     >
       Start Game
     </button>
+    <a
+      href="/leaderboard"
+      class="mt-[15px] block text-center text-brand-primary hover:underline"
+    >
+      View Leaderboard
+    </a>
   </div>
 </div>

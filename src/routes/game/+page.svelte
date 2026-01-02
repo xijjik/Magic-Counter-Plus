@@ -188,9 +188,17 @@
         <p class="text-2xl mb-6 font-semibold">{victor.name} wins!</p>
         <a
           href="/"
-          class="w-full py-3 px-4 bg-brand-primary text-white rounded-[10px] font-semibold hover:opacity-90 transition-opacity"
+          class="block w-full py-3 px-4 bg-brand-primary text-white rounded-[10px] font-semibold hover:opacity-90 transition-opacity"
           >New game</a
         >
+        <div class="mt-4">
+          <a
+            href="/leaderboard"
+            class="block text-center text-brand-primary hover:underline"
+          >
+            View Leaderboard
+          </a>
+        </div>
       </div>
     </div>
   {/if}
