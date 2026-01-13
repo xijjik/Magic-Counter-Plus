@@ -28,4 +28,8 @@ export const DECKS = [
   "Progenitus",
   "Indominus Rex, Alpha",
   "Nashi, Searcher in the Dark",
+  "Hakbal of the Surging Soul",
+  "Magda, Brazen Outlaw",
+  "The Scarab God",
+  "Teval, the Balanced Scale",
 ];
