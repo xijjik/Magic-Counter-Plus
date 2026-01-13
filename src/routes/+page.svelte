@@ -2,27 +2,35 @@
   import { goto } from "$app/navigation";
   import { dev } from "$app/environment";
   import { injectAnalytics } from "@vercel/analytics/sveltekit";
+  import { PLAYERS, DECKS } from "$lib/constants";
 
   injectAnalytics({ mode: dev ? "development" : "production" });
 
   let playerCount = $state(4);
-  let playerNames: string[] = $state([]);
+  let participants = $state<{ name: string; deck: string }[]>([]);
 
   $effect(() => {
-    if (playerNames.length < playerCount) {
-      while (playerNames.length < playerCount) {
-        playerNames.push("");
+    if (participants.length < playerCount) {
+      while (participants.length < playerCount) {
+        participants.push({ name: "", deck: "" });
       }
-    } else if (playerNames.length > playerCount) {
-      playerNames = playerNames.slice(0, playerCount);
+    } else if (participants.length > playerCount) {
+      participants = participants.slice(0, playerCount);
     }
   });
 
   function startGame() {
-    const names = playerNames.map((n) => n.trim()).filter((n) => n);
-    if (names.length >= 2) {
+    // Filter out participants where name or deck is missing? Or just check name?
+    // User wants dropdowns, so assuming valid selection if they pick one.
+    // Let's ensure both are selected for a valid participant.
+    const validParticipants = participants.filter((p) => p.name && p.deck);
+
+    if (validParticipants.length >= 2) {
       const params = new URLSearchParams();
-      names.forEach((name) => params.append("player", name));
+      validParticipants.forEach((p) => {
+        params.append("player", p.name);
+        params.append("deck", p.deck);
+      });
       goto(`/game?${params.toString()}`);
     }
   }
@@ -50,30 +58,51 @@
     </div>
 
     <div class="flex flex-col gap-[15px] mb-[30px]">
-      {#each playerNames as name, i}
-        <div>
-          <label
-            for="player-{i}"
-            class="block mb-[5px] font-semibold text-black"
-            >Player {i + 1}:</label
-          >
-          <input
-            id="player-{i}"
-            type="text"
-            bind:value={playerNames[i]}
-            required
-            minlength="3"
-            maxlength="3"
-            placeholder="Player {i + 1}"
-            class="uppercase w-full py-3 px-3 border-2 border-[#ddd] rounded-[10px] text-base box-border transition-[border-color] duration-200 focus:outline-none focus:border-[#667eea]"
-          />
+      {#each participants as participant, i}
+        <div class="flex gap-2">
+          <div class="flex-1">
+            <label
+              for="player-{i}"
+              class="block mb-[5px] font-semibold text-black"
+              >Player {i + 1}:</label
+            >
+            <select
+              id="player-{i}"
+              bind:value={participants[i].name}
+              required
+              class="w-full py-3 px-3 border-2 border-[#ddd] rounded-[10px] text-base box-border transition-[border-color] duration-200 focus:outline-none focus:border-[#667eea]"
+            >
+              <option value="" disabled selected>Select Player</option>
+              {#each PLAYERS as player}
+                <option value={player}>{player}</option>
+              {/each}
+            </select>
+          </div>
+          <div class="flex-1">
+            <label
+              for="deck-{i}"
+              class="block mb-[5px] font-semibold text-black">Deck:</label
+            >
+            <select
+              id="deck-{i}"
+              bind:value={participants[i].deck}
+              required
+              class="w-full py-3 px-3 border-2 border-[#ddd] rounded-[10px] text-base box-border transition-[border-color] duration-200 focus:outline-none focus:border-[#667eea]"
+            >
+              <option value="" disabled selected>Select Deck</option>
+              {#each DECKS as deck}
+                <option value={deck}>{deck}</option>
+              {/each}
+            </select>
+          </div>
         </div>
       {/each}
     </div>
 
     <button
-      class="w-full py-4 px-4 bg-brand-primary text-white border-none rounded-[10px] text-[1.2rem] font-semibold cursor-pointer transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(102,126,234,0.4)] active:translate-y-0"
+      class="w-full py-4 px-4 bg-brand-primary text-white border-none rounded-[10px] text-[1.2rem] font-semibold cursor-pointer transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(102,126,234,0.4)] active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed"
       onclick={() => startGame()}
+      disabled={participants.some((p) => !p.name || !p.deck)}
     >
       Start Game
     </button>

@@ -1,26 +1,43 @@
 
-import { supabase } from "$lib/clients/supabaseClient";
+import { supabaseServer } from "$lib/clients/supabaseServer";
 
 export async function load() {
   console.log('--- Leaderboard Load Function Initiated ---');
 
-  console.log('Attempting to fetch data from Supabase...');
-  const { data, error } = await supabase
-    .from('leaderboard')
-    .select('players, wins')
-    .order('wins', { ascending: false });
+  console.log('Attempting to fetch data from Supabase matches table...');
+  const { data: matches, error } = await supabaseServer
+    .from('matches')
+    .select('*');
 
   if (error) {
-    console.error('Error fetching leaderboard data:', error);
-    console.error('Error details:', JSON.stringify(error, null, 2));
-    return { players: [] };
+    console.error('Error fetching matches data:', error);
+    return { playerStats: [], deckStats: [] };
   }
 
-  console.log('Successfully fetched data.');
-  console.log('Data count:', data ? data.length : 0);
-  console.log('Data sample:', data ? data.slice(0, 2) : 'No data');
+  // Calculate stats
+  const playerWins: Record<string, number> = {};
+  const deckWins: Record<string, number> = {};
+
+  matches?.forEach((match) => {
+    if (match.winner) {
+      playerWins[match.winner] = (playerWins[match.winner] || 0) + 1;
+    }
+    if (match.winner_deck) {
+      deckWins[match.winner_deck] = (deckWins[match.winner_deck] || 0) + 1;
+    }
+  });
+
+  // Convert to arrays and sort
+  const playerStats = Object.entries(playerWins)
+    .map(([name, wins]) => ({ name, wins }))
+    .sort((a, b) => b.wins - a.wins);
+
+  const deckStats = Object.entries(deckWins)
+    .map(([name, wins]) => ({ name, wins }))
+    .sort((a, b) => b.wins - a.wins);
 
   return {
-    players: data ?? []
+    playerStats,
+    deckStats
   };
 }

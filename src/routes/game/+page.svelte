@@ -4,6 +4,7 @@
 
   interface Player {
     name: string;
+    deck: string;
     life: number;
   }
 
@@ -11,9 +12,11 @@
 
   onMount(() => {
     const names = $page.url.searchParams.getAll("player");
+    const decks = $page.url.searchParams.getAll("deck");
     if (names.length >= 2) {
-      players = names.map((name) => ({
+      players = names.map((name, i) => ({
         name,
+        deck: decks[i] || "Unknown",
         life: 20,
       }));
     } else {
@@ -64,14 +67,18 @@
   }
 
   function sendDataToSupabase() {
+    if (!victor) return;
+
     fetch("/api/leaderboard", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        players: selectedVictorName.toUpperCase(),
-        wins: 1,
+        players: players.map((p) => p.name),
+        winner: victor.name,
+        decks_used: players.map((p) => p.deck),
+        winner_deck: victor.deck,
       }),
     });
   }
