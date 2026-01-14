@@ -3,7 +3,7 @@ import { supabaseServer } from '$lib/clients/supabaseServer';
 
 export async function POST({ request }) {
     const body = await request.json();
-    const { players, winner, decks_used, winner_deck } = body;
+    const { players, winner, decks_used, winner_deck, player_kills } = body;
 
     // Validate input
     if (!players || !winner || !decks_used || !winner_deck) {
@@ -17,7 +17,8 @@ export async function POST({ request }) {
             players, // jsonb
             winner,  // text
             decks_used, // jsonb
-            winner_deck // text
+            winner_deck, // text
+            player_kills // jsonb
         }]);
     
     if (insertError) {

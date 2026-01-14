@@ -56,10 +56,16 @@
   let congratulationsModal = $state(false);
   let selectedVictorName = $state("");
   let victor = $state<Player | null>(null);
+  let playerKills = $state<Record<string, number>>({});
 
   function openCrownDialog() {
     crownDialog = true;
     selectedVictorName = "";
+    // Initialize kills for all players
+    playerKills = {};
+    players.forEach((p) => {
+      playerKills[p.name] = 0;
+    });
   }
 
   function closeCrownDialog() {
@@ -79,6 +85,7 @@
         winner: victor.name,
         decks_used: players.map((p) => p.deck),
         winner_deck: victor.deck,
+        player_kills: playerKills,
       }),
     });
   }
@@ -124,6 +131,7 @@
         stroke="#fad83e"
         stroke-width="1.5"
         fill="#fad83e"
+        class="drop-shadow-lg"
       />
     </svg>
   </button>
@@ -138,7 +146,7 @@
       onkeydown={(e) => e.key === "Escape" && closeCrownDialog()}
     >
       <div
-        class="modal-content bg-brand-secondary rounded-[20px] p-10 max-w-md w-[90%] shadow-xl"
+        class="modal-content bg-brand-secondary rounded-[20px] p-10 max-w-md w-[90%] shadow-xl max-h-[90vh] overflow-y-auto"
         onclick={stopPropagation}
         role="dialog"
         aria-modal="true"
@@ -148,15 +156,59 @@
         <h2 class="text-2xl font-bold mb-6 text-center text-brand-primary">
           Who won?
         </h2>
-        <select
-          bind:value={selectedVictorName}
-          class="w-full py-3 px-4 border-2 border-brand-primary rounded-[10px] text-base mb-6 text-brand-primary focus:outline-none focus:border-brand-primary"
-        >
-          <option value="">Select a winner...</option>
-          {#each players as player}
-            <option value={player.name}>{player.name}</option>
-          {/each}
-        </select>
+
+        <div class="mb-6">
+          <label
+            for="winner-select"
+            class="block text-brand-primary font-bold mb-2">Winner</label
+          >
+          <select
+            id="winner-select"
+            bind:value={selectedVictorName}
+            class="w-full py-3 px-4 border-2 border-brand-primary rounded-[10px] text-base text-brand-primary focus:outline-none focus:border-brand-primary bg-white"
+          >
+            <option value="">Select a winner...</option>
+            {#each players as player}
+              <option value={player.name}>{player.name}</option>
+            {/each}
+          </select>
+        </div>
+
+        <div class="mb-8">
+          <h3 class="text-brand-primary font-bold mb-3">Player Kills</h3>
+          <div class="space-y-3 bg-white/50 p-4 rounded-xl">
+            {#each players as player}
+              <div class="flex items-center justify-between">
+                <span class="text-brand-primary font-medium text-lg"
+                  >{player.name}</span
+                >
+                <div class="flex items-center gap-2">
+                  <button
+                    class="w-8 h-8 rounded-full bg-brand-primary text-white flex items-center justify-center text-lg font-bold hover:opacity-90 transition-opacity"
+                    onclick={() =>
+                      (playerKills[player.name] = Math.max(
+                        0,
+                        (playerKills[player.name] || 0) - 1
+                      ))}>-</button
+                  >
+                  <input
+                    type="number"
+                    min="0"
+                    bind:value={playerKills[player.name]}
+                    class="w-16 py-1 px-2 border-2 border-brand-primary rounded-lg text-brand-primary text-center font-bold focus:outline-none bg-white"
+                  />
+                  <button
+                    class="w-8 h-8 rounded-full bg-brand-primary text-white flex items-center justify-center text-lg font-bold hover:opacity-90 transition-opacity"
+                    onclick={() =>
+                      (playerKills[player.name] =
+                        (playerKills[player.name] || 0) + 1)}>+</button
+                  >
+                </div>
+              </div>
+            {/each}
+          </div>
+        </div>
+
         <div class="flex gap-4">
           <button
             onclick={closeCrownDialog}
