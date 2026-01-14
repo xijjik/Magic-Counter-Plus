@@ -115,6 +115,12 @@
       >
         View Leaderboard
       </a>
+      <a
+        href="/recent-matches"
+        class="mt-2 block text-center text-brand-primary hover:underline"
+      >
+        View Recent Matches
+      </a>
     </div>
   </div>
 {:else}
@@ -149,6 +155,20 @@
           Enter
         </button>
       </form>
+      <div class="mt-6 flex flex-col gap-2">
+        <a
+          href="/leaderboard"
+          class="text-center text-brand-primary hover:underline"
+        >
+          View Leaderboard
+        </a>
+        <a
+          href="/recent-matches"
+          class="text-center text-brand-primary hover:underline"
+        >
+          View Recent Matches
+        </a>
+      </div>
     </div>
   </div>
 {/if}
