@@ -17,7 +17,7 @@
       players = names.map((name, i) => ({
         name,
         deck: decks[i] || "Unknown",
-        life: 20,
+        life: 30,
       }));
     } else {
       window.location.href = "/";

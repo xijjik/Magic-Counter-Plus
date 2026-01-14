@@ -32,4 +32,5 @@ export const DECKS = [
   "Magda, Brazen Outlaw",
   "The Scarab God",
   "Teval, the Balanced Scale",
+  "Krenko, Mob Boss"
 ];
