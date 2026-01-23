@@ -121,6 +121,12 @@
       >
         View Recent Matches
       </a>
+      <a
+        href="/player-stats"
+        class="mt-2 block text-center text-brand-primary hover:underline"
+      >
+        View Player Stats
+      </a>
     </div>
   </div>
 {:else}
@@ -167,6 +173,12 @@
           class="text-center text-brand-primary hover:underline"
         >
           View Recent Matches
+        </a>
+        <a
+          href="/player-stats"
+          class="text-center text-brand-primary hover:underline"
+        >
+          View Player Stats
         </a>
       </div>
     </div>
