@@ -13,6 +13,7 @@ export const PLAYERS = [
 
 export const DECKS = [
   "Alela, Artful Provocateur",
+  "Arabella, Abandoned Doll",
   "Auntie Ool, Cursewretch",
   "Bello, Bard of the Brambles",
   "Caesar, Legion’s Emperor",
@@ -21,18 +22,22 @@ export const DECKS = [
   "Heliod, Sun Crowned",
   "Huatli, Poet of Unity",
   "Indominus Rex, Alpha",
+  "Inspirit, Flagship Vessel",
   "Ishhin, Two Heavens as One",
   "Jon Irenicus, Shattered One",
   "Kardur, Doomscourge",
+  "Kilo, Apogee Mind",
   "Krenko, Mob Boss",
   "Magda, Brazen Outlaw",
   "Marisi, Breaker of the Coil",
   "Nashi, Searcher in the Dark",
   "Ozai, the Phoenix King",
-  "Progenitus",
+  "Polukranos, Reborn",
   "Selvala, Explorer Returned",
+  "Shilgengar, Sire of Famine",
   "Teval, the Balanced Scale",
   "The Scarab God",
   "Volo, Guide to Monsters",
+  "Wayta, Trainer Prodigy",
   "Xantcha, Sleeper Agent"
 ];
