@@ -12,6 +12,7 @@ export const PLAYERS = [
 ];
 
 export const DECKS = [
+  "Aang, at the Crossroads",
   "Alela, Artful Provocateur",
   "Arabella, Abandoned Doll",
   "Auntie Ool, Cursewretch",
