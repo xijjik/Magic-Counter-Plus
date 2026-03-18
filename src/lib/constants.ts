@@ -31,6 +31,7 @@ export const DECKS = [
   "Krenko, Mob Boss",
   "Magda, Brazen Outlaw",
   "Marisi, Breaker of the Coil",
+  "Nelly Borca, Impulsive Accuser",
   "Nashi, Searcher in the Dark",
   "Ozai, the Phoenix King",
   "Polukranos, Reborn",
