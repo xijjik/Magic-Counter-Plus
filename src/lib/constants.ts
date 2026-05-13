@@ -40,6 +40,7 @@ export const DECKS = [
   "Shilgengar, Sire of Famine",
   "Teval, the Balanced Scale",
   "The Scarab God",
+  "The Lord of Pain",
   "Tidus, Yuna's Guardian",
   "Volo, Guide to Monsters",
   "Wayta, Trainer Prodigy",
