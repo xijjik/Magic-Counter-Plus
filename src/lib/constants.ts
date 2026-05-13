@@ -28,6 +28,7 @@ export const DECKS = [
   "Jon Irenicus, Shattered One",
   "Kardur, Doomscourge",
   "Kilo, Apogee Mind",
+  "Kratos, God of War",
   "Krenko, Mob Boss",
   "Magda, Brazen Outlaw",
   "Marisi, Breaker of the Coil",
@@ -39,6 +40,7 @@ export const DECKS = [
   "Shilgengar, Sire of Famine",
   "Teval, the Balanced Scale",
   "The Scarab God",
+  "Tidus, Yuna's Guardian",
   "Volo, Guide to Monsters",
   "Wayta, Trainer Prodigy",
   "Xantcha, Sleeper Agent"
