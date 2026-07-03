@@ -26,6 +26,7 @@ export const DECKS = [
     "Ozai, the Phoenix King",
     "Polukranos, Reborn",
     "Red Death, Shipwrecker",
+    "Sauron, Lord of the Rings",
     "Selvala, Explorer Returned",
     "Shilgengar, Sire of Famine",
     "Teval, the Balanced Scale",
