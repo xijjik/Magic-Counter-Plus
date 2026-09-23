@@ -1,81 +1,57 @@
 <script lang="ts">
-  import { fade } from "svelte/transition";
+  import { Crown } from "@lucide/svelte";
 
-  export let data;
+  let { data } = $props();
 
-  function formatDate(dateString: string) {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  }
+  const dayFormat = new Intl.DateTimeFormat("en-US", { weekday: "short", month: "short", day: "numeric" });
+  const timeFormat = new Intl.DateTimeFormat("en-US", { hour: "2-digit", minute: "2-digit" });
 </script>
 
-<div class="min-h-screen bg-gray-100 p-8 font-sans">
-  <div class="max-w-4xl mx-auto">
-    <div class="flex justify-between items-center mb-8">
-      <h1 class="text-3xl font-bold text-gray-800">Recent Matches</h1>
-      <a
-        href="/"
-        class="bg-brand-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-opacity-90 transition-all"
-      >
-        Back to Home
-      </a>
-    </div>
+<svelte:head>
+  <title>Recent matches · MTG Counter</title>
+</svelte:head>
 
-    <div class="bg-white rounded-[20px] shadow-lg overflow-hidden">
-      {#if data.matches.length > 0}
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse">
-            <thead>
-              <tr class="bg-gray-50 border-b border-gray-100">
-                <th class="p-6 font-semibold text-gray-600">Date</th>
-                <th class="p-6 font-semibold text-gray-600">Players</th>
-                <th class="p-6 font-semibold text-gray-600">Winner</th>
-                <th class="p-6 font-semibold text-gray-600">Winning Deck</th>
-              </tr>
-            </thead>
-            <tbody>
-              {#each data.matches as match, i}
-                <tr
-                  class="border-b border-gray-50 hover:bg-gray-50 transition-colors"
-                  in:fade={{ delay: i * 50 }}
-                >
-                  <td class="p-6 text-gray-700 whitespace-nowrap">
-                    {formatDate(match.game_date)}
-                  </td>
-                  <td class="p-6 text-gray-700">
-                    <div class="flex flex-wrap gap-2">
-                      {#each match.players as player}
-                        <span
-                          class="bg-gray-100 px-2 py-1 rounded text-sm text-gray-600"
-                        >
-                          {player}
-                        </span>
-                      {/each}
-                    </div>
-                  </td>
-                  <td class="p-6">
-                    <span class="font-bold text-brand-primary">
-                      {match.winner}
-                    </span>
-                  </td>
-                  <td class="p-6 text-gray-700">
-                    {match.winner_deck}
-                  </td>
-                </tr>
-              {/each}
-            </tbody>
-          </table>
-        </div>
-      {:else}
-        <div class="p-10 text-center text-gray-500">
-          No matches recorded yet.
-        </div>
-      {/if}
-    </div>
-  </div>
+<div class="mb-8 sm:mb-10">
+  <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Recent matches</h1>
+  <p class="mt-2 text-ink-2">The last ten games the group recorded.</p>
 </div>
+
+{#if data.matches.length > 0}
+  <ol class="panel divide-y divide-line overflow-hidden">
+    {#each data.matches as match}
+      {@const date = new Date(match.game_date)}
+      <li class="grid gap-4 p-5 sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:gap-6 sm:px-6 lg:grid-cols-[8.5rem_minmax(0,1fr)_16rem] lg:items-center">
+        <div class="flex items-baseline gap-2 sm:block">
+          <div class="font-semibold">{dayFormat.format(date)}</div>
+          <div class="text-sm text-ink-3 tabular-nums">{timeFormat.format(date)}</div>
+        </div>
+
+        <ul class="flex flex-wrap gap-1.5" aria-label="Players">
+          {#each match.players as player, i}
+            {@const isWinner = player === match.winner}
+            <li
+              title={match.decks_used?.[i]}
+              class="inline-flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-sm {isWinner
+                ? 'bg-pink-soft font-semibold text-pink-deep ring-1 ring-pink-line'
+                : 'bg-sunken font-medium text-ink-2'}"
+            >
+              {#if isWinner}<Crown class="size-3.5" fill="currentColor" aria-label="Winner" />{/if}
+              {player}
+            </li>
+          {/each}
+        </ul>
+
+        <div class="min-w-0 sm:col-start-2 lg:col-start-auto lg:text-right">
+          <div class="text-xs font-medium text-ink-3">Winning deck</div>
+          <div class="truncate font-medium">{match.winner_deck}</div>
+        </div>
+      </li>
+    {/each}
+  </ol>
+{:else}
+  <div class="panel px-6 py-16 text-center">
+    <p class="font-semibold">No matches recorded yet</p>
+    <p class="mt-1 text-sm text-ink-3">Finish a game and crown a winner to start the history.</p>
+    <a href="/" class="btn-primary mt-6">Start a game</a>
+  </div>
+{/if}

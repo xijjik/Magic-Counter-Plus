@@ -2,16 +2,13 @@
 import { supabaseServer } from "$lib/clients/supabaseServer";
 
 export async function load() {
-  console.log('--- Leaderboard Load Function Initiated ---');
-
-  console.log('Attempting to fetch data from Supabase matches table...');
   const { data: matches, error } = await supabaseServer
     .from('matches')
     .select('*');
 
   if (error) {
     console.error('Error fetching matches data:', error);
-    return { playerStats: [], deckStats: [], killStats: [] };
+    return { playerStats: [], deckStats: [], killStats: [], matchCount: 0 };
   }
 
   // Calculate stats
@@ -49,6 +46,7 @@ export async function load() {
   return {
     playerStats,
     deckStats,
-    killStats
+    killStats,
+    matchCount: matches?.length ?? 0
   };
 }

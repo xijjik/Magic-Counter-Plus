@@ -1,12 +1,159 @@
 @import "tailwindcss";
 
 @theme {
-    --color-brand-primary: #f87e7b;
-    --color-brand-secondary: #f0f8c1;
+    --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+    --color-canvas: #f4f5f7;
+    --color-surface: #ffffff;
+    --color-sunken: #eceef1;
+    --color-line: #e3e5e9;
+    --color-line-strong: #cfd3d9;
+    --color-ink: #111318;
+    --color-ink-2: #464b55;
+    --color-ink-3: #686e79;
+
+    --color-pink: #e0007a;
+    --color-pink-deep: #b80064;
+    --color-pink-bright: #ff2d95;
+    --color-pink-soft: #fff0f7;
+    --color-pink-line: #ffc7e2;
+
+    --shadow-panel: 0 1px 2px rgb(17 19 24 / 0.04), 0 4px 16px -6px rgb(17 19 24 / 0.08);
+    --shadow-lift: 0 2px 4px rgb(17 19 24 / 0.06), 0 16px 40px -12px rgb(17 19 24 / 0.22);
+    --shadow-pink: 0 2px 4px rgb(184 0 100 / 0.18), 0 10px 24px -8px rgb(224 0 122 / 0.45);
+
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-body {
-    font-family: "Roboto", Arial;
-    font-weight: 700;
-    font-style: italic;
+@layer base {
+    html {
+        background: var(--color-canvas);
+        color: var(--color-ink);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+        -webkit-tap-highlight-color: transparent;
+        scrollbar-color: var(--color-line-strong) transparent;
+    }
+
+    ::selection {
+        background: var(--color-pink-line);
+        color: var(--color-ink);
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--color-pink-bright);
+        outline-offset: 2px;
+    }
+
+    input,
+    select {
+        caret-color: var(--color-pink);
+        accent-color: var(--color-pink);
+    }
+
+    h1,
+    h2,
+    h3 {
+        text-wrap: balance;
+    }
+
+    button:not(:disabled),
+    [role="button"] {
+        cursor: pointer;
+    }
+}
+
+@layer components {
+    .field {
+        width: 100%;
+        height: 2.75rem;
+        padding: 0 0.875rem;
+        border: 1px solid var(--color-line-strong);
+        border-radius: 0.625rem;
+        background-color: var(--color-surface);
+        color: var(--color-ink);
+        font-size: 0.9375rem;
+        font-weight: 500;
+        transition: border-color 150ms, box-shadow 150ms;
+    }
+
+    .field:hover {
+        border-color: var(--color-ink-3);
+    }
+
+    .field:focus {
+        outline: none;
+        border-color: var(--color-pink);
+        box-shadow: 0 0 0 3px rgb(255 45 149 / 0.18);
+    }
+
+    select.field {
+        appearance: none;
+        padding-right: 2.25rem;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23686e79' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' viewBox='0 0 24 24'%3E%3Cpath d='m7 10 5 5 5-5'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        text-overflow: ellipsis;
+    }
+
+    select.field:invalid {
+        color: var(--color-ink-3);
+    }
+
+    .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        height: 3rem;
+        padding: 0 1.25rem;
+        border-radius: 0.75rem;
+        background: var(--color-pink);
+        color: #fff;
+        font-weight: 600;
+        box-shadow: var(--shadow-pink);
+        transition: background-color 150ms, transform 150ms var(--ease-out-expo), box-shadow 150ms;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+        background: var(--color-pink-deep);
+    }
+
+    .btn-primary:active:not(:disabled) {
+        transform: scale(0.98);
+    }
+
+    .btn-primary:disabled {
+        background: var(--color-line-strong);
+        color: var(--color-ink-3);
+        box-shadow: none;
+        cursor: not-allowed;
+    }
+
+    .btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        height: 3rem;
+        padding: 0 1.25rem;
+        border-radius: 0.75rem;
+        border: 1px solid var(--color-line-strong);
+        background: var(--color-surface);
+        color: var(--color-ink);
+        font-weight: 600;
+        transition: background-color 150ms, border-color 150ms;
+    }
+
+    .btn-secondary:hover {
+        background: var(--color-canvas);
+        border-color: var(--color-ink-3);
+    }
+
+    .panel {
+        background: var(--color-surface);
+        border: 1px solid var(--color-line);
+        border-radius: 1rem;
+        box-shadow: var(--shadow-panel);
+    }
 }
