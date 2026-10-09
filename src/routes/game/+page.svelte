@@ -19,6 +19,7 @@
   let deltaTimers: ReturnType<typeof setTimeout>[] = [];
 
   onMount(() => {
+    document.body.classList.add("game-active");
     const names = page.url.searchParams.getAll("player");
     const decks = page.url.searchParams.getAll("deck");
     if (names.length >= 2 && TABLE_LAYOUTS[names.length]) {
@@ -31,7 +32,10 @@
     } else {
       goto("/", { replaceState: true });
     }
-    return () => deltaTimers.forEach(clearTimeout);
+    return () => {
+      document.body.classList.remove("game-active");
+      deltaTimers.forEach(clearTimeout);
+    };
   });
 
   let layout = $derived(TABLE_LAYOUTS[players.length]);
@@ -307,7 +311,7 @@
 {/if}
 
 <style>
-  :global(body) {
+  :global(body.game-active) {
     overflow: hidden;
     overscroll-behavior: none;
     background: #e4e6ea;
