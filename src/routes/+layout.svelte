@@ -2,7 +2,7 @@
     import "./layout.css"
     import favicon from "$lib/assets/favicon.svg"
     import { page } from "$app/state"
-    import { Swords, Trophy, History, UserRound } from "@lucide/svelte"
+    import { Swords, Trophy, History, UserRound, Sparkles } from "@lucide/svelte"
 
     let { children } = $props()
 
@@ -11,6 +11,7 @@
         { href: "/leaderboard", label: "Leaderboard", icon: Trophy },
         { href: "/recent-matches", label: "Matches", icon: History },
         { href: "/player-stats", label: "Players", icon: UserRound },
+        { href: "/fun-stats", label: "Stats", icon: Sparkles },
     ]
 
     let isGame = $derived(page.url.pathname.startsWith("/game"))
@@ -61,7 +62,7 @@
             aria-label="Main"
             class="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-md md:hidden"
         >
-            <ul class="grid grid-cols-4">
+            <ul class="grid grid-cols-5">
                 {#each NAV as item}
                     {@const active = page.url.pathname === item.href}
                     <li>
