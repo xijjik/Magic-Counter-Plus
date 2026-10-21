@@ -39,6 +39,7 @@ export const DECKS = [
     "The Scarab God",
     "The Lord of Pain",
     "Tidus, Yuna's Guardian",
+    "Umbris, Fear Manifest",
     "Volo, Guide to Monsters",
     "Wayta, Trainer Prodigy",
     "Xantcha, Sleeper Agent",
