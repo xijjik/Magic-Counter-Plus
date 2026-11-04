@@ -32,6 +32,7 @@ export const DECKS = [
     "Polukranos, Reborn",
     "Red Death, Shipwrecker",
     "Sauron, Lord of the Rings",
+    "Sauron, The Dark Lord",
     "Selvala, Explorer Returned",
     "Shilgengar, Sire of Famine",
     "Terra, Herald of Hope",
