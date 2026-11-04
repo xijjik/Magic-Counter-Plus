@@ -1,4 +1,4 @@
-export const PLAYERS = ["Tim", "Sasha", "Tommy", "Sarah", "Bobby", "Dan", "Bennya", "Sidd", "Luke", "Estela", "Jessy"]
+export const PLAYERS = ["Tim", "Sasha", "Tommy", "Sarah", "Bobby", "Dan", "Bennya", "Sidd", "Luke", "Estela", "Jessy", "Splat"]
 
 export const DECKS = [
     "Aang, at the Crossroads",
