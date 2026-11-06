@@ -3,6 +3,7 @@
   import { page } from "$app/state";
   import { PLAYERS } from "$lib/constants";
   import RankedList from "$lib/components/RankedList.svelte";
+  import { isOneVsOne } from "$lib/funStats";
   import type { PageData } from "./$types";
 
   interface Match {
@@ -41,26 +42,48 @@
       (m) => Array.isArray(m.players) && m.players.includes(selectedPlayer),
     ),
   );
-  let wins = $derived(playerMatches.filter((m) => m.winner === selectedPlayer).length);
-  let losses = $derived(playerMatches.length - wins);
-  let winRate = $derived(playerMatches.length ? Math.round((wins / playerMatches.length) * 100) : 0);
-  let totalKills = $derived(
-    playerMatches.reduce((acc, m) => acc + (Number(m.player_kills?.[selectedPlayer]) || 0), 0),
-  );
+  let groupMatches = $derived(playerMatches.filter((m) => !isOneVsOne(m)));
+  let duelMatches = $derived(playerMatches.filter(isOneVsOne));
+
+  const summarise = (matches: Match[]) => {
+    const wins = matches.filter((m) => m.winner === selectedPlayer).length;
+    const kills = matches.reduce((acc, m) => acc + (Number(m.player_kills?.[selectedPlayer]) || 0), 0);
+    const winRate = matches.length ? Math.round((wins / matches.length) * 100) : 0;
+    return [
+      { label: "Wins", value: wins, accent: true },
+      { label: "Losses", value: matches.length - wins },
+      { label: "Kills", value: kills },
+      { label: "Win rate", value: `${winRate}%` },
+    ];
+  };
+
+  let stats = $derived(summarise(groupMatches));
+  let duelStats = $derived(summarise(duelMatches));
   let deckWins = $derived(
-    tally(playerMatches.filter((m) => m.winner === selectedPlayer).map((m) => m.winner_deck)),
+    tally(groupMatches.filter((m) => m.winner === selectedPlayer).map((m) => m.winner_deck)),
   );
   let decksPlayed = $derived(
-    tally(playerMatches.map((m) => m.decks_used?.[m.players.indexOf(selectedPlayer)])),
+    tally(groupMatches.map((m) => m.decks_used?.[m.players.indexOf(selectedPlayer)])),
   );
-
-  let stats = $derived([
-    { label: "Wins", value: wins, accent: true },
-    { label: "Losses", value: losses },
-    { label: "Kills", value: totalKills },
-    { label: "Win rate", value: `${winRate}%` },
-  ]);
+  const games = (n: number) => `${n} ${n === 1 ? "game" : "games"}`;
 </script>
+
+{#snippet statGrid(items: ReturnType<typeof summarise>)}
+  <dl class="grid grid-cols-2 border-t border-line sm:grid-cols-4">
+    {#each items as stat, i}
+      <div
+        class="px-5 py-5 sm:px-7 sm:py-6 {i % 2 === 1 ? 'border-l border-line' : ''} {i >= 2
+          ? 'border-t border-line sm:border-t-0'
+          : ''} {i === 2 ? 'sm:border-l' : ''}"
+      >
+        <dt class="text-sm font-medium text-ink-3">{stat.label}</dt>
+        <dd class="mt-1 text-4xl font-bold tracking-tight tabular-nums sm:text-5xl {stat.accent ? 'text-pink' : ''}">
+          {stat.value}
+        </dd>
+      </div>
+    {/each}
+  </dl>
+{/snippet}
 
 <svelte:head>
   <title>{selectedPlayer} · MTG Counter</title>
@@ -94,29 +117,23 @@
     </span>
     <div class="min-w-0">
       <h2 class="truncate text-2xl font-bold tracking-tight">{selectedPlayer}</h2>
-      <p class="text-sm text-ink-3">
-        <span class="tabular-nums">{playerMatches.length}</span>
-        {playerMatches.length === 1 ? "game" : "games"} played
-      </p>
+      <p class="text-sm text-ink-3 tabular-nums">{games(groupMatches.length)} in group play</p>
     </div>
   </div>
-  <dl class="grid grid-cols-2 border-t border-line sm:grid-cols-4">
-    {#each stats as stat, i}
-      <div
-        class="px-5 py-5 sm:px-7 sm:py-6 {i % 2 === 1 ? 'border-l border-line' : ''} {i >= 2
-          ? 'border-t border-line sm:border-t-0'
-          : ''} {i === 2 ? 'sm:border-l' : ''}"
-      >
-        <dt class="text-sm font-medium text-ink-3">{stat.label}</dt>
-        <dd class="mt-1 text-4xl font-bold tracking-tight tabular-nums sm:text-5xl {stat.accent ? 'text-pink' : ''}">
-          {stat.value}
-        </dd>
-      </div>
-    {/each}
-  </dl>
+  {@render statGrid(stats)}
 </section>
 
 <div class="mt-5 grid items-start gap-5 md:grid-cols-2">
   <RankedList title="Wins by deck" unit="Wins" entries={deckWins} empty="No wins with any deck yet." />
   <RankedList title="Most played decks" unit="Games" entries={decksPlayed} empty="No games recorded yet." />
 </div>
+
+{#if duelMatches.length}
+  <section class="panel mt-5 overflow-hidden" aria-labelledby="duel-title">
+    <div class="flex items-baseline justify-between gap-4 px-5 py-4 sm:px-7">
+      <h2 id="duel-title" class="text-base font-semibold">1v1</h2>
+      <span class="text-sm text-ink-3 tabular-nums">{games(duelMatches.length)}</span>
+    </div>
+    {@render statGrid(duelStats)}
+  </section>
+{/if}

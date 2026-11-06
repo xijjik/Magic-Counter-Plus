@@ -21,7 +21,7 @@
 
 <div class="mb-8 sm:mb-10">
   <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">The numbers</h1>
-  <p class="mt-2 text-ink-2">Bragging rights and grudges, recalculated after every match.</p>
+  <p class="mt-2 text-ink-2">Bragging rights and grudges from group games, recalculated after every match.</p>
 </div>
 
 <section class="panel" aria-label="Totals">

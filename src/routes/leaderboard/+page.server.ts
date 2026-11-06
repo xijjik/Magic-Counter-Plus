@@ -1,52 +1,47 @@
-
 import { supabaseServer } from "$lib/clients/supabaseServer";
+import { isOneVsOne, type Match } from "$lib/funStats";
 
-export async function load() {
-  const { data: matches, error } = await supabaseServer
-    .from('matches')
-    .select('*');
+const ranked = (counts: Record<string, number>) =>
+  Object.entries(counts)
+    .map(([name, value]) => ({ name, value }))
+    .sort((a, b) => b.value - a.value);
 
-  if (error) {
-    console.error('Error fetching matches data:', error);
-    return { playerStats: [], deckStats: [], killStats: [], matchCount: 0 };
-  }
-
-  // Calculate stats
+function tally(matches: Match[]) {
   const playerWins: Record<string, number> = {};
   const deckWins: Record<string, number> = {};
   const playerKills: Record<string, number> = {};
 
-  matches?.forEach((match) => {
+  matches.forEach((match) => {
     if (match.winner) {
       playerWins[match.winner] = (playerWins[match.winner] || 0) + 1;
     }
     if (match.winner_deck) {
       deckWins[match.winner_deck] = (deckWins[match.winner_deck] || 0) + 1;
     }
-    if (match.player_kills) {
-      Object.entries(match.player_kills as Record<string, number>).forEach(([player, kills]) => {
-        playerKills[player] = (playerKills[player] || 0) + kills;
-      });
-    }
+    Object.entries(match.player_kills ?? {}).forEach(([player, kills]) => {
+      playerKills[player] = (playerKills[player] || 0) + kills;
+    });
   });
 
-  // Convert to arrays and sort
-  const playerStats = Object.entries(playerWins)
-    .map(([name, wins]) => ({ name, wins }))
-    .sort((a, b) => b.wins - a.wins);
+  return {
+    playerStats: ranked(playerWins),
+    deckStats: ranked(deckWins),
+    killStats: ranked(playerKills),
+    matchCount: matches.length,
+  };
+}
 
-  const deckStats = Object.entries(deckWins)
-    .map(([name, wins]) => ({ name, wins }))
-    .sort((a, b) => b.wins - a.wins);
-    
-  const killStats = Object.entries(playerKills)
-    .map(([name, kills]) => ({ name, kills }))
-    .sort((a, b) => b.kills - a.kills);
+export async function load() {
+  const { data, error } = await supabaseServer.from("matches").select("*");
+
+  if (error) {
+    console.error("Error fetching matches data:", error);
+  }
+
+  const matches = (data ?? []) as Match[];
 
   return {
-    playerStats,
-    deckStats,
-    killStats,
-    matchCount: matches?.length ?? 0
+    group: tally(matches.filter((m) => !isOneVsOne(m))),
+    oneVsOne: tally(matches.filter(isOneVsOne)),
   };
 }

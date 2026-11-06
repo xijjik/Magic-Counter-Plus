@@ -44,6 +44,8 @@ interface Context {
 
 const MIN_GAMES = 3
 
+export const isOneVsOne = (m: { players: string[] | null }) => m.players?.length === 2
+
 const pct = (n: number) => `${Math.round(n * 100)}%`
 const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`
 const pairKey = (a: string, b: string) => [a, b].sort().join("|")
@@ -60,7 +62,7 @@ const winnersOf = (matches: Match[]) => {
 
 function buildContext(raw: Match[]): Context {
     const matches = raw
-        .filter((m) => Array.isArray(m.players) && m.players.length >= 2 && m.winner)
+        .filter((m) => Array.isArray(m.players) && m.players.length > 2 && m.winner)
         .toSorted((a, b) => a.game_date.localeCompare(b.game_date))
     const players = new Map<string, PlayerTally>()
     const decks = new Map<string, DeckTally>()
