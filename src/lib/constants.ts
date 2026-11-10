@@ -37,6 +37,7 @@ export const DECKS = [
     "Shilgengar, Sire of Famine",
     "Terra, Herald of Hope",
     "Teval, the Balanced Scale",
+    "Thantis, the Warweaver",
     "The Scarab God",
     "The Lord of Pain",
     "Tidus, Yuna's Guardian",
